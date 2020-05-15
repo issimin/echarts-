@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人物关系图</title>
+    <style>
+        #main {
+            margin: 0 auto;
+            width: 800px;
+            height: 800px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main"></div>
+    <script src="js/echarts.min.js"></script>
+    <script>
+        let data1 = {
+            nodes: [{
+                name: '小红',
+                t: 100,
+
+            }, {
+                name: '小橙',
+                t: 90,
+
+            }, {
+                name: '小黄',
+                t: 80,
+
+            }, {
+                name: '小绿',
+                t: 75,
+
+            }, {
+                name: '小青',
+                t: 60,
+
+            }, {
+                name: '小蓝',
+                t: 65,
+
+            }, {
+                name: '小紫',
+                t: 60,
+
+            }, {
+                name: '小粉',
+                t: 55,
+
+            }, {
+                name: '小灰',
+                t: 50,
+
+            }, {
+                name: '小黑',
+                t: 75,
+
+            }],
+
+            links: [{
+                source: '小黑',
+                target: '小紫',
+                s: '10'
+            }, {
+                source: '小粉',
+                target: '小黄',
+                s: '9'
+            }, {
+                source: '小绿',
+                target: '小橙',
+                s: '8'
+            }, {
+                source: '小蓝',
+                target: '小绿',
+                s: '7'
+            }, {
+                source: '小蓝',
+                target: '小橙',
+                s: '6'
+            }, {
+                source: '小青',
+                target: '小橙',
+                s: '15'
+            }, {
+                source: '小红',
+                target: '小青',
+                s: '4'
+            }, {
+                source: '小灰',
+                target: '小红',
+                s: '13'
+            }, {
+                source: '小黄',
+                target: '小灰',
+                s: '5'
+            }, {
+                source: '小黑',
+                target: '小粉',
+                s: '3'
+            }, {
+                source: '小橙',
+                target: '小灰',
+                s: '2'
+            }, {
+                source: '小绿',
+                target: '小黄',
+                s: '8'
+            }, {
+                source: '小紫',
+                target: '小青',
+                s: '7'
+            }, {
+                source: '小蓝',
+                target: '小红',
+                s: '9'
+            }, {
+                source: '小紫',
+                target: '小蓝',
+                s: '20'
+            }, {
+                source: '小粉',
+                target: '小红',
+                s: '10'
+            }, {
+                source: '小紫',
+                target: '小红',
+                s: '5'
+            }, {
+                source: '小紫',
+                target: '小红',
+                s: '6'
+            }, {
+                source: '小紫',
+                target: '小红',
+                s: '7'
+            }]
+        }
+        data1.nodes = JSON.parse(JSON.stringify(data1.nodes).replace(/\bt\b/g, "symbolSize"));
+        data1.links = JSON.parse(JSON.stringify(data1.links).replace(/\bs\b/g, 'name'))
+
+        let data = {
+            nodes: [{
+                itemStyle: {
+                    color: 'red'
+                }
+            }, {
+                itemStyle: {
+                    color: 'orange'
+                }
+            }, {
+                itemStyle: {
+                    color: 'yellow'
+                }
+            }, {
+                itemStyle: {
+                    color: 'green'
+                }
+            }, {
+                itemStyle: {
+                    color: 'lightgreen'
+                }
+            }, {
+                itemStyle: {
+                    color: 'blue'
+                }
+            }, {
+                itemStyle: {
+                    color: 'purple'
+                }
+            }, {
+                itemStyle: {
+                    color: 'pink'
+                }
+            }, {
+                itemStyle: {
+                    color: 'gray'
+                }
+            }, {
+                itemStyle: {
+                    color: 'black'
+                }
+            }],
+
+        }
+        var myChart = echarts.init(document.getElementById('main'));
+        data1.nodes = data.nodes.map((item, index) => {
+            return {...item,
+                ...data1.nodes[index]
+            }
+        })
+
+        data1.links.forEach(item => {
+            item.lineStyle = {
+                width: Number(item.name),
+            }
+
+        });
+        option = {
+            title: {
+                text: '人物关系图',
+                textStyle: {
+                    fontSize: 25
+                }
+
+            },
+            series: [{
+                type: 'graph',
+                layout: 'force',
+                draggable: true,
+                roam: true,
+                focusNodeAdjacency: true,
+                edgeSymbol: ['circle'],
+                edgeLabel: {
+                    align: 'center',
+                    show: true,
+                    fontSize: 25,
+                    formatter(x) {
+                        return x.data.name;
+                    }
+                },
+                label: {
+                    show: true,
+                    fontSize: 25
+                },
+                force: {
+                    repulsion: 2000,
+                    edgeLength: 120
+                },
+                lineStyle: {
+                    color: 'source',
+                    opacity: 0.9,
+                    curveness: 0.2
+                },
+                data: data1.nodes,
+                links: data1.links
+            }]
+        }
+        myChart.setOption(option);
+    </script>
+
+</body>
+
+</html>
